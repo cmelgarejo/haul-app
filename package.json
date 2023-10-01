@@ -1,0 +1,25 @@
+{
+  "name": "haul-app",
+  "version": "1.0.0",
+  "description": "Take home for Haul Compilance",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "pnpm run --parallel dev",
+    "build": "pnpm run --parallel build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "clear": "rm -rf apps/web/.next/ apps/server/dist/",
+    "clear:node_modules": "rm -rf node_modules/ apps/web/node_modules/ apps/server/node_modules/",
+    "clear:all": "pnpm run clear && pnpm run clear:node_modules",
+    "seed": "node mongo-init/seed.js"
+  },
+  "keywords": [],
+  "author": "Christian Melgarejo <cmelgaejo.dev@gmail.com>",
+  "license": "MIR",
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^13.5.3",
+    "dotenv": "^16.3.1",
+    "mongodb": "^6.1.0",
+    "xml2js": "^0.6.2"
+  }
+}
