@@ -76,3 +76,12 @@ pnpm seed
 
 It will use the script contained in `mongo-init/seed.js` and use the XML provided in the source,
 convert it to JSON and insert all data into the corresponding collections.
+
+## Deployment
+
+This project is deployed in [Railway](https://railway.app/), the deployment is done automatically
+when pushing to the `main` branch.
+
+## License
+
+[MIT licensed](LICENSE).

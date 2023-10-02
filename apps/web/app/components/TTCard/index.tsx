@@ -9,6 +9,7 @@ type TTCardProps = {
   type: string;
 };
 
+// Truck or Trailer card component
 export default function TTCard({ vin, type }: TTCardProps) {
   const [data, setData] = useState<DecodedVIN | undefined>();
   const [loading, setLoading] = useState(false);
@@ -40,7 +41,7 @@ export default function TTCard({ vin, type }: TTCardProps) {
             {type?.toLowerCase().indexOf("truck") >= 0 ? (
               <BsTruckFlatbed size={48} className="text-gray-300" />
             ) : (
-              <FaTrailer size={48} className="text-gray-300" />
+              <FaTrailer style={{ paddingTop: 4 }} size={48} className="text-gray-300" />
             )}
           </Avatar>
         </div>
