@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { CompactTable } from "@table-library/react-table-library/compact";
-import { FormControl, FormGroup, Input, Stack, TablePagination, Tooltip, Typography } from "@mui/material";
+import { FormControl, FormGroup, TablePagination, TextField, Tooltip, Typography } from "@mui/material";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { useSort } from "@table-library/react-table-library/sort";
@@ -149,34 +149,35 @@ export default function HaulGrid({}: HaulGridProps) {
     onChange: handleSelect,
   });
   return (
-    <div className="flex flex-col w-screen h-screen">
-      <Typography variant="h4">DOT Inspections</Typography>
-      <Stack spacing={10} className="h-10">
+    <div className="flex flex-col w-screen h-screen p-2">
+      <Typography variant="h4" className="pl-6">
+        DOT Inspections
+      </Typography>
+      <div className="flex flex-col h-screen p-2 rounded-lg bg-white shadow-lg">
         <FormGroup>
           <FormControl>
-            <Input placeholder="Search BASIC" onChange={handleFilter} />
+            <TextField fullWidth placeholder="Filer BASIC" onChange={handleFilter} />
           </FormControl>
         </FormGroup>
-      </Stack>
-      <div className="flex-grow h-72">
-        {data.nodes.length ? (
-          <CompactTable
-            columns={columns}
-            data={data}
-            theme={theme}
-            pagination={pagination}
-            sort={sort}
-            layout={{ fixedHeader: true }}
-            select={select}
-          />
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full">
-            <p className="text-2xl">No data found</p>
-          </div>
-        )}
-      </div>
-      <Stack spacing={10} className="h-15">
+        <div className="flex-grow h-72">
+          {data.nodes.length ? (
+            <CompactTable
+              columns={columns}
+              data={data}
+              theme={theme}
+              pagination={pagination}
+              sort={sort}
+              layout={{ fixedHeader: true }}
+              select={select}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full">
+              <p className="text-2xl">No data found</p>
+            </div>
+          )}
+        </div>
         <TablePagination
+          className="!border-b-0"
           count={totalRecordCount}
           page={paginationState.page}
           rowsPerPage={paginationState.size}
@@ -184,7 +185,7 @@ export default function HaulGrid({}: HaulGridProps) {
           onRowsPerPageChange={(event) => pagination.fns.onSetSize(parseInt(event.target.value, 10))}
           onPageChange={(event, page) => pagination.fns.onSetPage(page)}
         />
-      </Stack>
+      </div>
     </div>
   );
 }
