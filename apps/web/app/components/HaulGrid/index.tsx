@@ -10,7 +10,6 @@ import { State } from "@table-library/react-table-library/types/common";
 import { FaArrowDown, FaArrowUp, FaTableList } from "react-icons/fa6";
 import { Inspection } from "@server/inspections/entities/inspection.entity";
 import Status from "@web/app/components/Status";
-import "./styles.css";
 import Link from "next/link";
 
 type HaulGridProps = Record<string, never>;
@@ -57,7 +56,7 @@ const columns = [
   {
     label: "Links",
     renderCell: (item: Inspection) => (
-      <Tooltip title="Details">
+      <Tooltip title="Details" placement="left-start">
         <Link href={`/inspections/${item.id}`}>
           <FaTableList />
         </Link>
@@ -93,9 +92,9 @@ export default function HaulGrid({}: HaulGridProps) {
     const filter = { "violations.violation.BASIC": event.target.value };
     setFilter(JSON.stringify(filter));
   };
-  function handleSelect(action: any, state: any) {
-    console.log(action, state);
-  }
+  // function handleSelect(action: any, state: any) {
+  //   console.log(action, state);
+  // }
   const fetchInspections = useCallback(async () => {
     const qsBuilder = {
       page: paginationState.page.toString(),
@@ -146,14 +145,14 @@ export default function HaulGrid({}: HaulGridProps) {
     },
   );
   const select = useRowSelect(data, {
-    onChange: handleSelect,
+    // onChange: handleSelect,
   });
   return (
     <div className="flex flex-col w-screen h-screen p-2">
       <Typography variant="h4" className="pl-6">
         DOT Inspections
       </Typography>
-      <div className="flex flex-col h-screen p-2 rounded-lg bg-white shadow-lg">
+      <div className="flex flex-col h-screen p-2 rounded-lg bg-white shadow-md">
         <FormGroup>
           <FormControl>
             <TextField fullWidth placeholder="Filer BASIC" onChange={handleFilter} />

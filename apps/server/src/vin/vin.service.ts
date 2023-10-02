@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { DecodedVIN } from "./entities/decoded-vin.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MongoRepository } from "typeorm";
@@ -25,7 +25,11 @@ export class VinService {
     const response = await fetch(url);
     const json = await response.json();
     const decodedVIN = json["Results"][0] as DecodedVIN;
-    decodedVIN && (await this.vinRepo.save(decodedVIN));
+    if (decodedVIN) {
+      // don't store bad requests!
+      if (decodedVIN.ErrorCode.indexOf("400") >= 0) throw new BadRequestException(decodedVIN.ErrorText);
+      await this.vinRepo.save(decodedVIN);
+    }
     return decodedVIN;
   }
 }

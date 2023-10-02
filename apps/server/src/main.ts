@@ -3,6 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { HttpExceptionFilter } from "./exception/exception.filter";
+import { Logger } from "@nestjs/common";
 
 const PORT = process.env.PORT || 4000;
 
@@ -18,7 +19,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   if (process.env.NODE_ENV === "development") SwaggerModule.setup("docs", app, document);
-  console.info(`Server started on port ${PORT}`);
   await app.listen(PORT);
+  new Logger().log(`Server started on port ${PORT}`);
 }
 bootstrap();

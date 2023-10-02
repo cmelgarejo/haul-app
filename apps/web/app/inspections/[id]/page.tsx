@@ -1,15 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Typography, CircularProgress, Card, IconButton, TextField } from "@mui/material";
+import { Typography, CircularProgress, IconButton, TextField, Tooltip } from "@mui/material";
 import { FaArrowLeft } from "react-icons/fa";
-import { useRouter } from "next/navigation"; // Please double-check this import as 'next/navigation' might not be correct
-import Status from "@web/app/components/Status";
-import { Inspection } from "@server/inspections/entities/inspection.entity";
+import { useRouter } from "next/navigation";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { Vehicle } from "@server/inspections/entities/vehicle";
 import { CompactTable } from "@table-library/react-table-library/compact";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { Violation } from "@server/inspections/entities/violation";
+import { Inspection } from "@server/inspections/entities/inspection.entity";
+import Status from "@web/app/components/Status";
+import TTCard from "@web/app/components/TTCard";
 
 const InspectionDetailView = ({ params }: { params: { id: string } }) => {
   const theme = useTheme(getTheme());
@@ -58,7 +59,11 @@ const InspectionDetailView = ({ params }: { params: { id: string } }) => {
     {
       label: "VIN",
       resize: true,
-      renderCell: (item: Vehicle) => item.vehicle_id_number,
+      renderCell: (item: Vehicle) => (
+        <Tooltip title={item.vehicle_id_number} placement="top-start">
+          <p>{item.vehicle_id_number}</p>
+        </Tooltip>
+      ),
     },
   ];
   const violationsColumns = [
@@ -70,7 +75,7 @@ const InspectionDetailView = ({ params }: { params: { id: string } }) => {
     {
       label: "Section",
       resize: true,
-      renderCell: () => "-",
+      renderCell: () => "-", // still don't know where to get this info
       // renderCell: (item: Violation) => "Section",
     },
     {
@@ -86,24 +91,32 @@ const InspectionDetailView = ({ params }: { params: { id: string } }) => {
     {
       label: "Description",
       resize: true,
-      renderCell: (item: Violation) => item.description,
+      renderCell: (item: Violation) => (
+        <Tooltip title={item.description} placement="top-start">
+          <p>{item.description}</p>
+        </Tooltip>
+      ),
     },
     {
       label: "IN SMS",
       resize: true,
-      renderCell: (item: Violation) => item.convicted_of_dif_charge,
+      renderCell: (item: Violation) => item.convicted_of_dif_charge, // making a wild guess here
     },
     {
       label: "BASIC",
       resize: true,
-      renderCell: (item: Violation) => item.BASIC,
+      renderCell: (item: Violation) => (
+        <Tooltip title={item.BASIC} placement="top-start">
+          <p>{item.BASIC}</p>
+        </Tooltip>
+      ),
     },
   ];
   const date = new Date(inspection.inspection_date);
   return (
     <div className="min-h-screen">
       <div className="flex flex-col space-y-4 w-full">
-        <div id="header" className="flex items-center mb-2 w-full">
+        <div className="flex items-center mt-4 mb-2">
           <IconButton color="primary" aria-label="Go back" onClick={() => router.back()}>
             <FaArrowLeft />
           </IconButton>
@@ -111,8 +124,8 @@ const InspectionDetailView = ({ params }: { params: { id: string } }) => {
             {inspection.report_number}
           </Typography>
         </div>
-        <div id="content" className="flex mb-2 w-full">
-          <div id="overview" className="flex-grow bg-white p-4 m-2 rounded shadow-md">
+        <div id="content" className="flex flex-row mb-2">
+          <div id="overview" className="basis-2/3 bg-white shadow-md p-4 m-2 rounded-2xl">
             <div className="flex w-full mb-4">
               <div className="w-1/2 pr-4">
                 <div className="w-full pt-4 pl-4 h-14 bg-gray-100 rounded-sm">
@@ -198,15 +211,12 @@ const InspectionDetailView = ({ params }: { params: { id: string } }) => {
               />
             </div>
           </div>
-          <div id="vehicle_info" className="flex-grow">
-            <div id="truck" className="m-2">
-              {/* Truck info cards */}
-              <Card className="p-4">{/* Truck info */}</Card>
-            </div>
-            <div id="trailer" className="m-2">
-              {/* Trailer info cards */}
-              <Card className="p-4">{/* Trailer info */}</Card>
-            </div>
+          <div id="vehicle_info" className="basis-1/3">
+            {inspection.vehicles?.vehicle.map((vehicle) => (
+              <div key={`${vehicle.license_number}`} className="p-2">
+                <TTCard type={vehicle.unit_type} vin={vehicle.vehicle_id_number ?? ""}></TTCard>
+              </div>
+            ))}
           </div>
         </div>
       </div>
