@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import { Controller, Get, Param, ParseIntPipe, Query } from "@nestjs/common";
 import { InspectionsService } from "./inspections.service";
 
 @Controller("inspections")
@@ -7,11 +7,11 @@ export class InspectionsController {
 
   @Get()
   findAll(
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10,
-    @Query("filter") filter: string,
-    @Query("sortBy") sortBy: string,
-    @Query("sortDir") sortDir: string = "ASC",
+    @Query("page", new ParseIntPipe({ optional: true })) page: number = 1,
+    @Query("limit", new ParseIntPipe({ optional: true })) limit: number = 10,
+    @Query("filter") filter?: string,
+    @Query("sortBy") sortBy?: string,
+    @Query("sortDir") sortDir?: string,
   ) {
     return this.inspectionsSvc.findAll(page, limit, filter, sortBy, sortDir);
   }

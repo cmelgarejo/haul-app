@@ -19,10 +19,10 @@ npm run dev # also works
 ### Running the apps
 
 Copy `apps/web/.env.example` to `apps/web/.env.local` file inside the `web` making sure to
-set the `NEXT_PUBLIC_NESTJS_SERVER` variable to the NestJS server URL:
+set the `NEXT_PUBLIC_API_HOST` variable to the NestJS server URL:
 
 ```env
-NEXT_PUBLIC_NESTJS_SERVER=http://localhost:4000
+NEXT_PUBLIC_API_HOST=http://localhost:4000
 ```
 
 Then install the dependencies:

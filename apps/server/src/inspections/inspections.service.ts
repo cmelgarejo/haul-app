@@ -9,17 +9,12 @@ export class InspectionsService {
   @InjectRepository(Inspection)
   private inspections: MongoRepository<Inspection>;
 
-  findAll(page: number = 1, limit: number = 10, filter: string, sortBy: string, sortDir: string) {
-    console.log(filter);
-    console.log(sortBy);
-    console.log(sortDir);
+  findAll(page: number = 0, limit: number = 10, filter?: string, sortBy?: string, sortDir?: string) {
     const where = filter ? JSON.parse(filter) : undefined;
-    const order = sortBy ? { [sortBy]: sortDir } : undefined;
-    console.log(where);
-    return this.inspections.find({
-      skip: page > 1 ? page * limit : 0,
-      take: limit ? +limit : 10,
-      // where: { vehicles: { vehicle: { BASIC: "Unsafe Driving" } } },
+    const order = sortBy ? { [sortBy]: sortDir ? sortDir : "ASC" } : undefined;
+    return this.inspections.findAndCount({
+      skip: page > 0 ? page * limit : 0,
+      take: limit ? limit : 10,
       where,
       order,
     });

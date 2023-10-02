@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "pnpm run --parallel dev",
     "build": "pnpm run --parallel build",
+    "build:server": "pnpm --filter server build",
+    "build:web": "pnpm --filter web build",
+    "start:server": "pnpm --filter server start:prod",
+    "start:web": "pnpm --filter web start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "clear": "rm -rf apps/web/.next/ apps/server/dist/",
