@@ -7,7 +7,7 @@ export class InspectionsController {
 
   @Get()
   findAll(
-    @Query("page", new ParseIntPipe({ optional: true })) page: number = 1,
+    @Query("page", new ParseIntPipe({ optional: true })) page: number = 0,
     @Query("limit", new ParseIntPipe({ optional: true })) limit: number = 10,
     @Query("filter") filter?: string,
     @Query("sortBy") sortBy?: string,
