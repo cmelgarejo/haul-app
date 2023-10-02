@@ -1,16 +1,15 @@
-import { NextRequest } from "next/server";
 import { API_BASE_URL } from "@web/config/config";
-export const dynamic = "force-dynamic"; // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
+// export const dynamic = "force-dynamic"; // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
 
 const headers = { "Content-Type": "application/json" };
 const options = { headers } as RequestInit;
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
+    const id = params.id;
     if (process.env.NODE_ENV !== "development") options.next = { revalidate: 86400 }; // 24h cache revalidation
     else options.cache = "no-cache";
-    const qs = req.nextUrl.searchParams.toString();
-    const result = await fetch(`${API_BASE_URL}inspections${qs ? `?${qs}` : ""}`, options);
+    const result = await fetch(`${API_BASE_URL}inspections/${id}`, options);
     return Response.json(await result.json());
   } catch (error: any) {
     console.error(error);

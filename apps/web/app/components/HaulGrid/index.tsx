@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import { Inspection } from "@server/inspections/entities/inspection.entity";
 import { CompactTable } from "@table-library/react-table-library/compact";
+import { FormControl, FormGroup, Input, Stack, TablePagination, Tooltip, Typography } from "@mui/material";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { useSort } from "@table-library/react-table-library/sort";
 import { usePagination } from "@table-library/react-table-library/pagination";
-import { FormControl, FormGroup, Input, Stack, TablePagination, Typography } from "@mui/material";
+import { useRowSelect } from "@table-library/react-table-library/select";
 import { State } from "@table-library/react-table-library/types/common";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
-import Status from "../Status";
+import { FaArrowDown, FaArrowUp, FaTableList } from "react-icons/fa6";
+import { Inspection } from "@server/inspections/entities/inspection.entity";
+import Status from "@web/app/components/Status";
 import "./styles.css";
+import Link from "next/link";
 
 type HaulGridProps = Record<string, never>;
 
@@ -18,12 +20,12 @@ const columns = [
     label: "Date",
     renderCell: (item: Inspection) =>
       new Date(item.inspection_date).toLocaleDateString("en-US", {
-        year: "2-digit",
         month: "2-digit",
         day: "2-digit",
+        year: "2-digit",
       }),
     sort: { sortKey: "inspection_date" },
-    resize: false,
+    resize: true,
   },
   {
     label: "Status",
@@ -32,25 +34,36 @@ const columns = [
       return <Status text="No Violation" color="success" />;
     },
     sort: { sortKey: "violations.violation.BASIC" },
-    resize: false,
+    resize: true,
   },
   {
     label: "Inspection Number",
     renderCell: (item: Inspection) => item.report_number,
     sort: { sortKey: "report_number" },
-    resize: false,
+    resize: true,
   },
   {
     label: "BASIC",
     renderCell: (item: Inspection) => item.violations.violation.BASIC,
     sort: { sortKey: "violations.violation.BASIC" },
-    resize: false,
+    resize: true,
   },
   {
     label: "Vehicle Plate",
     renderCell: (item: Inspection) =>
       item.vehicles.vehicle[0]?.license_number ?? item.vehicles.vehicle[1]?.license_number,
-    resize: false,
+    resize: true,
+  },
+  {
+    label: "Links",
+    renderCell: (item: Inspection) => (
+      <Tooltip title="Details">
+        <Link href={`/inspections/${item.id}`}>
+          <FaTableList />
+        </Link>
+      </Tooltip>
+    ),
+    resize: true,
   },
 ];
 
@@ -80,6 +93,9 @@ export default function HaulGrid({}: HaulGridProps) {
     const filter = { "violations.violation.BASIC": event.target.value };
     setFilter(JSON.stringify(filter));
   };
+  function handleSelect(action: any, state: any) {
+    console.log(action, state);
+  }
   const fetchInspections = useCallback(async () => {
     const qsBuilder = {
       page: paginationState.page.toString(),
@@ -129,6 +145,9 @@ export default function HaulGrid({}: HaulGridProps) {
       sortFns: {},
     },
   );
+  const select = useRowSelect(data, {
+    onChange: handleSelect,
+  });
   return (
     <div className="flex flex-col w-screen h-screen">
       <Typography variant="h4">DOT Inspections</Typography>
@@ -139,7 +158,7 @@ export default function HaulGrid({}: HaulGridProps) {
           </FormControl>
         </FormGroup>
       </Stack>
-      <div className="flex-grow p-4">
+      <div className="flex-grow h-72">
         {data.nodes.length ? (
           <CompactTable
             columns={columns}
@@ -148,6 +167,7 @@ export default function HaulGrid({}: HaulGridProps) {
             pagination={pagination}
             sort={sort}
             layout={{ fixedHeader: true }}
+            select={select}
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full">

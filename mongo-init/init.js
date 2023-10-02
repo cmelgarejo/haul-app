@@ -8,4 +8,5 @@ db.createCollection("crashes");
 db.createCollection("serious_violations");
 db.createCollection("decoded_vins");
 
+// create indexes for the collections
 db.inspections.createIndex({ "violations.violation.BASIC": 1 });

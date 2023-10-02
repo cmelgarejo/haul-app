@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-const HaulGrid = dynamic(() => import("@web/app/components/HaulDataGrid"), { ssr: false });
+const HaulGrid = dynamic(() => import("@web/app/components/HaulGrid"), { ssr: false });
 
 export default function Home() {
   return (

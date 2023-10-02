@@ -11,8 +11,11 @@ export class InspectionsService {
 
   findAll(page: number = 0, limit: number = 10, filter?: string, sortBy?: string, sortDir?: string) {
     const where = filter ? JSON.parse(filter) : undefined;
+    // awful way to make a case-insensitive search
+    if (where) where[Object.keys(where)[0]] = new RegExp(where[Object.keys(where)[0]], "i");
     const order = sortBy ? { [sortBy]: sortDir ? sortDir : "ASC" } : undefined;
     return this.inspections.findAndCount({
+      select: ["id", "inspection_date", "report_number", "violations", "vehicles"],
       skip: page > 0 ? page * limit : 0,
       take: limit ? limit : 10,
       where,
