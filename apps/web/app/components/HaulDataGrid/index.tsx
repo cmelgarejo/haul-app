@@ -9,7 +9,7 @@ import { FormControl, FormGroup, Input, Stack, TablePagination, Typography } fro
 import { State } from "@table-library/react-table-library/types/common";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 import Status from "../Status";
-import "./index.css";
+import "./styles.css";
 
 type HaulGridProps = Record<string, never>;
 
@@ -17,7 +17,7 @@ const columns = [
   {
     label: "Date",
     renderCell: (item: Inspection) =>
-      item.inspection_date.toLocaleDateString("en-US", {
+      new Date(item.inspection_date).toLocaleDateString("en-US", {
         year: "2-digit",
         month: "2-digit",
         day: "2-digit",
@@ -163,7 +163,6 @@ export default function HaulGrid({}: HaulGridProps) {
           rowsPerPageOptions={[10, 20, 50, 100]}
           onRowsPerPageChange={(event) => pagination.fns.onSetSize(parseInt(event.target.value, 10))}
           onPageChange={(event, page) => pagination.fns.onSetPage(page)}
-          virtualizedOptions={{ rowHeight: 32 }}
         />
       </Stack>
     </div>

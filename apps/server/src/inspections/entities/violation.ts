@@ -1,5 +1,8 @@
 import { Column } from "typeorm";
 
+export class Violations {
+  violation: Violation;
+}
 export class Violation {
   @Column()
   code: string;

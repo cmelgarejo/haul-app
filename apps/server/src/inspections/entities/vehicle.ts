@@ -1,5 +1,8 @@
 import { Column } from "typeorm";
 
+export class Vehicles {
+  vehicle: Vehicle[];
+}
 export class Vehicle {
   @Column()
   unit: string;

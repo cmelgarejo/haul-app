@@ -1,6 +1,6 @@
 import { Column, Entity, ObjectIdColumn } from "typeorm";
-import { Vehicle } from "./vehicle";
-import { Violation } from "./violation";
+import { Vehicles } from "./vehicle";
+import { Violations } from "./violation";
 
 @Entity({ name: "inspections" })
 export class Inspection {
@@ -29,8 +29,8 @@ export class Inspection {
   HM_inspection: string;
 
   @Column()
-  vehicles: Vehicle[];
+  vehicles: Vehicles;
 
   @Column()
-  violations: Violation[];
+  violations: Violations;
 }
